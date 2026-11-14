@@ -114,6 +114,7 @@ same shape of request it sees from MiniMax Code.
 | `icon.svg` | plugin icon |
 | `test/checkin.test.mjs` | the checks used while building it (no network) |
 | `scripts/checkin-live.mjs` | a live call against the real API: `node scripts/checkin-live.mjs status` |
+| `scripts/verify-tool.mjs` | runs the tool against the live API and passes the result through the Harness's own lossless-JSON validator |
 
 ## Limitations
 
