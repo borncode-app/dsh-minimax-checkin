@@ -1,3 +1,23 @@
+> **This repository has moved into one monorepo.**
+>
+> The whole MiniMax set — the credit proxy, the daily check-in, the model-list
+> sync, the composer quota chip, the MiniMax Code bridge, and the shared grant
+> reader — now lives in
+> **[`borncode-app/dsh-minimax-kit`](https://github.com/borncode-app/dsh-minimax-kit)**,
+> one repository with one Plugins entry.
+>
+> | this repo | new home |
+> |---|---|
+> | `dsh-minimax-auth` | `packages/dsh-minimax-auth` |
+> | `dsh-minimax-credit` | `packages/dsh-minimax-credit` |
+> | `dsh-minimax-checkin` | `packages/dsh-minimax-checkin` |
+> | `dsh-minimax-model-sync` | `packages/dsh-minimax-model-sync` |
+> | `dsh-minimax-bridge` | `packages/dsh-minimax-bridge` |
+> | `dsh-model-quota` | `packages/dsh-model-quota` |
+>
+> The code and its history are unchanged; only the repository is shared. Install
+> `dsh-minimax-kit` instead of the individual bundles. This repository stays
+> open so the old links keep working.
 <div align="center">
   <img src="icon.svg" alt="" width="72" height="72">
   <h1>dsh-minimax-checkin</h1>
@@ -20,13 +40,13 @@ and `dsh-minimax-bridge` are also published as one bundle:
 
 Install the kit instead if you want the whole MiniMax set from a single
 **Plugins** entry. It ships these same packages as separate rows, so the code
-here is unchanged and each part keeps its own switch — this repository stays
+here is unchanged and each part keeps its own switch â€” this repository stays
 the home of the check-in client, the panel, the tool, and the routes.
 
 ## Where the sign-in code lives now
 
-The MiniMax Code grant reader — reading `~/.minimax/auth`, refreshing it under
-the app's own `auth.lock`, and the token/generation bookkeeping — moved to
+The MiniMax Code grant reader â€” reading `~/.minimax/auth`, refreshing it under
+the app's own `auth.lock`, and the token/generation bookkeeping â€” moved to
 **[`dsh-minimax-auth`](https://github.com/borncode-app/dsh-minimax-auth)**.
 
 This plugin and `dsh-minimax-credit` both import it, so one refresh path writes
@@ -40,7 +60,7 @@ export remains here as a subclass that supplies this plugin's error class and
 
 ## What it does
 
-MiniMax Code shows a **Daily Check-in** card in its own account menu — seven days, 400 credits each, 1,000 on
+MiniMax Code shows a **Daily Check-in** card in its own account menu â€” seven days, 400 credits each, 1,000 on
 the fourth and the seventh. The reward belongs to the account, not to the app, so there is no reason to open
 MiniMax Code for it.
 
@@ -56,15 +76,15 @@ The credit lands in the same account, so the MiniMax route in the Harness keeps 
 
 ## Features
 
-- **A tool** — `minimax_daily_checkin` with `action: "status"` (read the panel) or `action: "claim"`.
-- **A composer chip** — the current streak, the days left in this cycle, and a **Check in for N** button.
-- **Two routes** — `GET /plugins/minimax-checkin/status` and `POST /plugins/minimax-checkin/claim`, on the
+- **A tool** â€” `minimax_daily_checkin` with `action: "status"` (read the panel) or `action: "claim"`.
+- **A composer chip** â€” the current streak, the days left in this cycle, and a **Check in for N** button.
+- **Two routes** â€” `GET /plugins/minimax-checkin/status` and `POST /plugins/minimax-checkin/claim`, on the
   Web GUI's own origin.
-- **A daily schedule** — `autoCheckIn` claims at `autoCheckInHour` local time; the plugin skips the run when
+- **A daily schedule** â€” `autoCheckIn` claims at `autoCheckInHour` local time; the plugin skips the run when
   today's reward was already taken.
-- **Never signs in on its own** — it reuses the grant MiniMax Code wrote, and refreshes it in place when it is
+- **Never signs in on its own** â€” it reuses the grant MiniMax Code wrote, and refreshes it in place when it is
   about to expire, taking the same `auth.lock` the app uses so the two never fight over one token.
-- **Honest failures** — a rejected sign-in, a second claim, and an unreachable service each get their own
+- **Honest failures** â€” a rejected sign-in, a second claim, and an unreachable service each get their own
   message instead of a generic error.
 
 ## Requirements
@@ -73,9 +93,9 @@ The credit lands in the same account, so the MiniMax route in the Harness keeps 
 |---|---|
 | DeepSeek Harness | 0.2.x (Web GUI) |
 | Runtime | Node 24, supplied by the Harness runtime |
-| MiniMax Code | Signed in on **this machine** — the plugin borrows that sign-in and never opens a browser |
+| MiniMax Code | Signed in on **this machine** â€” the plugin borrows that sign-in and never opens a browser |
 | Account | MiniMax Code account (the reward belongs to it) |
-| Peer | [`dsh-minimax-auth`](../dsh-minimax-auth) — the shared grant reader (a `link:` dependency, not a bundle) |
+| Peer | [`dsh-minimax-auth`](../dsh-minimax-auth) â€” the shared grant reader (a `link:` dependency, not a bundle) |
 
 ## Install
 
@@ -85,7 +105,7 @@ git clone https://github.com/borncode-app/dsh-minimax-auth.git dsh-minimax-auth
 cd dsh-minimax-checkin && pnpm install
 ```
 
-Then in DSH: **Plugins** → install the bundle from that directory, or:
+Then in DSH: **Plugins** â†’ install the bundle from that directory, or:
 
 ```
 plugin_manager install_bundle target=C:\path\to\dsh-minimax-checkin
@@ -118,15 +138,15 @@ Restart once. The chip appears next to the composer.
 
 ```
 tool call / composer chip / daily timer
-              │
-              ▼
-     read the grant under ~/.minimax/auth  ──►  refresh in place when it is close to expiry
-              │  (same auth.lock the app uses)
-              ▼
-   GET /minimax-cloud/api/v1/signin/status   ──►  the panel: days, points, streak
-              │
-              ▼
-   POST /minimax-cloud/api/v1/signin/claim   ──►  day number and points granted
+              â”‚
+              â–¼
+     read the grant under ~/.minimax/auth  â”€â”€â–º  refresh in place when it is close to expiry
+              â”‚  (same auth.lock the app uses)
+              â–¼
+   GET /minimax-cloud/api/v1/signin/status   â”€â”€â–º  the panel: days, points, streak
+              â”‚
+              â–¼
+   POST /minimax-cloud/api/v1/signin/claim   â”€â”€â–º  day number and points granted
 ```
 
 Both requests carry the OAuth bearer and the signature headers the desktop client sends, so the API sees the
@@ -153,20 +173,20 @@ same shape of request it sees from MiniMax Code.
 - The API group and its signature scheme are MiniMax's own; a future change to them can stop this plugin from
   reading the panel until it is updated.
 
-## ภาษาไทย
+## à¸ à¸²à¸©à¸²à¹„à¸—à¸¢
 
-Plugin นี้ **กดเครดิตรายวันให้อัตโนมัติ** โดยไม่ต้องเปิด MiniMax Code — กดให้ของขวัญชุดเดียวกับที่ MiniMax Code
-แสดงในเมนูบัญชี (7 วัน, วันละ 400 เครดิต, วันที่ 4 และ 7 ได้ 1,000)
+Plugin à¸™à¸µà¹‰ **à¸à¸”à¹€à¸„à¸£à¸”à¸´à¸•à¸£à¸²à¸¢à¸§à¸±à¸™à¹ƒà¸«à¹‰à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´** à¹‚à¸”à¸¢à¹„à¸¡à¹ˆà¸•à¹‰à¸­à¸‡à¹€à¸›à¸´à¸” MiniMax Code â€” à¸à¸”à¹ƒà¸«à¹‰à¸‚à¸­à¸‡à¸‚à¸§à¸±à¸à¸Šà¸¸à¸”à¹€à¸”à¸µà¸¢à¸§à¸à¸±à¸šà¸—à¸µà¹ˆ MiniMax Code
+à¹à¸ªà¸”à¸‡à¹ƒà¸™à¹€à¸¡à¸™à¸¹à¸šà¸±à¸à¸Šà¸µ (7 à¸§à¸±à¸™, à¸§à¸±à¸™à¸¥à¸° 400 à¹€à¸„à¸£à¸”à¸´à¸•, à¸§à¸±à¸™à¸—à¸µà¹ˆ 4 à¹à¸¥à¸° 7 à¹„à¸”à¹‰ 1,000)
 
-- ยืม **การ login ที่ MiniMax Code เก็บไว้** ใน `~/.minimax/auth` มาใช้ (ไม่ต้อง login ใหม่ ไม่เปิดเบราว์เซอร์)
-- ต่อ API ของ MiniMax ด้วย header เดียวกับที่แอปเดสก์ท็อปส่ง (`x-timestamp`, `x-signature`, `yy`)
-- มี **tool** `minimax_daily_checkin` (`action: "status" | "claim"`) และ **ป้ายใต้ช่องพิมพ์** ที่มีปุ่ม "Check in for N"
-- ตั้ง `autoCheckIn: true` ให้กดของขวัญอัตโนมัติทุกวันเวลา `autoCheckInHour` (ปกติ 9 โมง) — ถ้ากดไปแล้ววันนั้นมันจะข้าม
-- ตอน token ใกล้หมดอายุ มัน refresh เอง **ในไฟล์เดิมของ MiniMax Code** พร้อม lock เดียวกัน → ไม่แย่ง token กัน
+- à¸¢à¸·à¸¡ **à¸à¸²à¸£ login à¸—à¸µà¹ˆ MiniMax Code à¹€à¸à¹‡à¸šà¹„à¸§à¹‰** à¹ƒà¸™ `~/.minimax/auth` à¸¡à¸²à¹ƒà¸Šà¹‰ (à¹„à¸¡à¹ˆà¸•à¹‰à¸­à¸‡ login à¹ƒà¸«à¸¡à¹ˆ à¹„à¸¡à¹ˆà¹€à¸›à¸´à¸”à¹€à¸šà¸£à¸²à¸§à¹Œà¹€à¸‹à¸­à¸£à¹Œ)
+- à¸•à¹ˆà¸­ API à¸‚à¸­à¸‡ MiniMax à¸”à¹‰à¸§à¸¢ header à¹€à¸”à¸µà¸¢à¸§à¸à¸±à¸šà¸—à¸µà¹ˆà¹à¸­à¸›à¹€à¸”à¸ªà¸à¹Œà¸—à¹‡à¸­à¸›à¸ªà¹ˆà¸‡ (`x-timestamp`, `x-signature`, `yy`)
+- à¸¡à¸µ **tool** `minimax_daily_checkin` (`action: "status" | "claim"`) à¹à¸¥à¸° **à¸›à¹‰à¸²à¸¢à¹ƒà¸•à¹‰à¸Šà¹ˆà¸­à¸‡à¸žà¸´à¸¡à¸žà¹Œ** à¸—à¸µà¹ˆà¸¡à¸µà¸›à¸¸à¹ˆà¸¡ "Check in for N"
+- à¸•à¸±à¹‰à¸‡ `autoCheckIn: true` à¹ƒà¸«à¹‰à¸à¸”à¸‚à¸­à¸‡à¸‚à¸§à¸±à¸à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´à¸—à¸¸à¸à¸§à¸±à¸™à¹€à¸§à¸¥à¸² `autoCheckInHour` (à¸›à¸à¸•à¸´ 9 à¹‚à¸¡à¸‡) â€” à¸–à¹‰à¸²à¸à¸”à¹„à¸›à¹à¸¥à¹‰à¸§à¸§à¸±à¸™à¸™à¸±à¹‰à¸™à¸¡à¸±à¸™à¸ˆà¸°à¸‚à¹‰à¸²à¸¡
+- à¸•à¸­à¸™ token à¹ƒà¸à¸¥à¹‰à¸«à¸¡à¸”à¸­à¸²à¸¢à¸¸ à¸¡à¸±à¸™ refresh à¹€à¸­à¸‡ **à¹ƒà¸™à¹„à¸Ÿà¸¥à¹Œà¹€à¸”à¸´à¸¡à¸‚à¸­à¸‡ MiniMax Code** à¸žà¸£à¹‰à¸­à¸¡ lock à¹€à¸”à¸µà¸¢à¸§à¸à¸±à¸™ â†’ à¹„à¸¡à¹ˆà¹à¸¢à¹ˆà¸‡ token à¸à¸±à¸™
 
-⚠️ ข้อจำกัด: ต้องล็อกอิน MiniMax Code ไว้บนเครื่องนี้, MiniMax ให้กดได้วันละครั้ง (ครั้งที่สองได้ `AlreadyClaimed`),
-และ `appVersion` ต้องตรงกับเวอร์ชัน MiniMax Code ที่ใช้อยู่ — ถ้าแอปอัปเดตแล้วเริ่มถูกปฏิเสธ ให้แก้ค่านี้ก่อน
+âš ï¸ à¸‚à¹‰à¸­à¸ˆà¸³à¸à¸±à¸”: à¸•à¹‰à¸­à¸‡à¸¥à¹‡à¸­à¸à¸­à¸´à¸™ MiniMax Code à¹„à¸§à¹‰à¸šà¸™à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸™à¸µà¹‰, MiniMax à¹ƒà¸«à¹‰à¸à¸”à¹„à¸”à¹‰à¸§à¸±à¸™à¸¥à¸°à¸„à¸£à¸±à¹‰à¸‡ (à¸„à¸£à¸±à¹‰à¸‡à¸—à¸µà¹ˆà¸ªà¸­à¸‡à¹„à¸”à¹‰ `AlreadyClaimed`),
+à¹à¸¥à¸° `appVersion` à¸•à¹‰à¸­à¸‡à¸•à¸£à¸‡à¸à¸±à¸šà¹€à¸§à¸­à¸£à¹Œà¸Šà¸±à¸™ MiniMax Code à¸—à¸µà¹ˆà¹ƒà¸Šà¹‰à¸­à¸¢à¸¹à¹ˆ â€” à¸–à¹‰à¸²à¹à¸­à¸›à¸­à¸±à¸›à¹€à¸”à¸•à¹à¸¥à¹‰à¸§à¹€à¸£à¸´à¹ˆà¸¡à¸–à¸¹à¸à¸›à¸à¸´à¹€à¸ªà¸˜ à¹ƒà¸«à¹‰à¹à¸à¹‰à¸„à¹ˆà¸²à¸™à¸µà¹‰à¸à¹ˆà¸­à¸™
 
 ## License
 
-[MIT](LICENSE) © 2026 BornCode
+[MIT](LICENSE) Â© 2026 BornCode
