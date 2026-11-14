@@ -12,6 +12,21 @@
 
 ---
 
+## Where the sign-in code lives now
+
+The MiniMax Code grant reader — reading `~/.minimax/auth`, refreshing it under
+the app's own `auth.lock`, and the token/generation bookkeeping — moved to
+**[`dsh-minimax-auth`](https://github.com/borncode-app/dsh-minimax-auth)**.
+
+This plugin and `dsh-minimax-credit` both import it, so one refresh path writes
+the grant instead of two. The dependency is pinned to a commit; bump
+`@local/dsh-minimax-auth` in `package.json` to take a newer one.
+
+Nothing else moved: this repository still owns the check-in client, the request
+signature, the panel, the tool, the routes, and the schedule. The `MinimaxAuth`
+export remains here as a subclass that supplies this plugin's error class and
+`MINIMAX_CHECKIN_*` codes.
+
 ## What it does
 
 MiniMax Code shows a **Daily Check-in** card in its own account menu — seven days, 400 credits each, 1,000 on
@@ -49,11 +64,14 @@ The credit lands in the same account, so the MiniMax route in the Harness keeps 
 | Runtime | Node 24, supplied by the Harness runtime |
 | MiniMax Code | Signed in on **this machine** — the plugin borrows that sign-in and never opens a browser |
 | Account | MiniMax Code account (the reward belongs to it) |
+| Peer | [`dsh-minimax-auth`](../dsh-minimax-auth) — the shared grant reader (a `link:` dependency, not a bundle) |
 
 ## Install
 
 ```bash
 git clone https://github.com/borncode-app/dsh-minimax-checkin.git dsh-minimax-checkin
+git clone https://github.com/borncode-app/dsh-minimax-auth.git dsh-minimax-auth
+cd dsh-minimax-checkin && pnpm install
 ```
 
 Then in DSH: **Plugins** → install the bundle from that directory, or:
@@ -107,7 +125,7 @@ same shape of request it sees from MiniMax Code.
 
 | file | role |
 |---|---|
-| `index.js` | Host row: sign-in handling, panel reading, claiming, the tool, the routes, the schedule |
+| `index.js` | Host row: panel reading, claiming, the tool, the routes, the schedule; the grant reader comes from `dsh-minimax-auth` |
 | `client.js` | the composer chip |
 | `cordis.patch.yml` | the bundle patch that inserts the row |
 | `locale/{en,th,zh}.json` | UI strings |
